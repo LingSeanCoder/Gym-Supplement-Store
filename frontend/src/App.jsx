@@ -7,6 +7,7 @@ import AdminProductsPage from './pages/AdminProductsPage.jsx'
 import MemberDashboardPage from './pages/MemberDashboardPage.jsx'
 import NotFoundPage from './pages/NotFoundPage.jsx'
 import StoreHomePage from './pages/StoreHomePage.jsx'
+import UiKit from './pages/UiKit'; 
 
 function App() {
   return (
@@ -14,19 +15,24 @@ function App() {
       <Routes>
         <Route element={<PublicLayout />}>
           <Route index element={<StoreHomePage />} />
+          {/* Đã thêm route ui-kit ở đây */}
+          <Route path="ui-kit" element={<UiKit />} />
         </Route>
+        
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<AdminDashboardPage />} />
           <Route path="products" element={<AdminProductsPage />} />
         </Route>
+        
         <Route path="/member" element={<MemberLayout />}>
           <Route index element={<MemberDashboardPage />} />
         </Route>
-        <Route path="/404" element={<NotFoundPage />} />
-        <Route path="*" element={<Navigate to="/404" replace />} />
+
+        {/* Thêm route 404 nếu Người 2 đã chuẩn bị trang này */}
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
-  )
+  );
 }
 
-export default App
+export default App;
