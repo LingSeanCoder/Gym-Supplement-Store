@@ -1,0 +1,35 @@
+name: Security Check
+
+on:
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  secret-scan:
+    name: Scan for Secrets
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Gitleaks - Scan for secrets
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check for forbidden files
+        run: |
+          echo "Checking for .env, .pem, .key files..."
+          # Find files but ignore .env.example
+          FORBIDDEN_FILES=$(git ls-files | grep -E '(^|/)\.env$|\.pem$|\.key$' || true)
+          
+          if [ -n "$FORBIDDEN_FILES" ]; then
+            echo "❌ ERROR: Forbidden sensitive files detected in this PR:"
+            echo "$FORBIDDEN_FILES"
+            echo "Please remove them and add them to .gitignore."
+            exit 1
+          else
+            echo "✅ No forbidden files found."
+          fi
