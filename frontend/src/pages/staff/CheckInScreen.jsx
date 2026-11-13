@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import axiosClient from '../../api/axiosClient';
 import { CheckCircle, XCircle, Clock, User } from 'lucide-react';
-import { Button } from '../../components/ui/Button';
-import { Input } from '../../components/ui/Input';
+import Button from '../../components/ui/Button';
+import Input from '../../components/ui/Input';
 
 /**
  * CheckInScreen - Staff page to check in a member.

@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import axiosClient from '../../api/axiosClient';
 import { User, Shield, Clock } from 'lucide-react';
-import { Button } from '../../components/ui/Button';
-import { Input } from '../../components/ui/Input';
-import { Select } from '../../components/ui/Select';
+import Button from '../../components/ui/Button';
+import Input from '../../components/ui/Input';
+import Select from '../../components/ui/Select';
 
 /**
  * MembershipForm - Staff page to renew a member's plan.
