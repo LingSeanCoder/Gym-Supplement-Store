@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
 /**
@@ -8,26 +8,22 @@ import { useAuth } from '../contexts/AuthContext';
  * - Nếu login nhưng role không khớp -> redirect về /403.
  */
 export default function ProtectedRoute({ children, allowedRoles }) {
-  const { user, loading } = useAuth();
-  const location = useLocation();
-  const navigate = useNavigate();
+  const { user, isLoading } = useAuth();
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-night">
-        <p className="text-white">Đang tải...</p>
+        <p className="text-white text-center mt-10">Đang tải...</p>
       </div>
     );
   }
 
   if (!user) {
-    navigate('/login', { replace: true, state: { from: location } });
-    return null;
+    return <Navigate to="/login" replace />;
   }
 
   if (allowedRoles && !allowedRoles.includes(user.role)) {
-    navigate('/403', { replace: true, state: { from: location } });
-    return null;
+    return <Navigate to="/403" replace />;
   }
 
   return children;

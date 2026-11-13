@@ -15,7 +15,7 @@ const AuthContext = createContext(null);
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Khôi phục state từ localStorage khi component mount.
   useEffect(() => {
@@ -29,7 +29,7 @@ export function AuthProvider({ children }) {
         setUser(null);
       }
     }
-    setLoading(false);
+    setIsLoading(false);
   }, []);
 
   async function login(email, password) {
@@ -63,7 +63,7 @@ export function AuthProvider({ children }) {
     setUser(null);
   }
 
-  const value = { user, token, loading, login, register, logout };
+  const value = { user, token, isLoading, login, register, logout };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
