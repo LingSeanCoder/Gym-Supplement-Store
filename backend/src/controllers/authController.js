@@ -5,8 +5,22 @@ const { findUserByEmail, createUser } = require('../repositories/authRepository'
 const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d';
 
-if (!JWT_SECRET) {
-  throw new Error('FATAL: JWT_SECRET environment variable is not set. Server cannot start securely.');
+// Kiểm tra cấu hình; trả false để controller dừng khi thiếu secret.
+function requireJwtSecret(res) {
+  if (!JWT_SECRET) {
+    res.status(500).json({
+      success: false,
+      data: null,
+      error: {
+        code: 'CONFIGURATION_ERROR',
+        message: 'JWT_SECRET is not configured',
+      },
+    });
+
+    return false;
+  }
+
+  return true;
 }
 
 /**
@@ -15,7 +29,7 @@ if (!JWT_SECRET) {
  */
 async function register(req, res) {
   try {
-    const { email, password, full_name, role } = req.body;
+    const { email, password, full_name } = req.body;
 
     if (!email || !password || !full_name) {
       return res.status(400).json({
@@ -24,6 +38,8 @@ async function register(req, res) {
         error: { code: 'VALIDATION_ERROR', message: 'email, password and full_name are required' },
       });
     }
+
+    if (!requireJwtSecret(res)) return;
 
     const existing = await findUserByEmail(email);
     if (existing) {
@@ -35,12 +51,12 @@ async function register(req, res) {
     }
 
     const passwordHash = await bcrypt.hash(password, 10);
-    const userRole = role || 'member';
+    const userRole = 'member';
 
     const user = await createUser(email, passwordHash, full_name, userRole);
 
     const token = jwt.sign(
-      { user_id: user.user_id, role: user.role },
+      { user_id: user.id, role: user.role },
       JWT_SECRET,
       { expiresIn: JWT_EXPIRES_IN }
     );
@@ -49,7 +65,7 @@ async function register(req, res) {
       success: true,
       data: {
         user: {
-          user_id: user.user_id,
+          user_id: user.id,
           email: user.email,
           full_name: user.full_name,
           role: user.role,
@@ -102,8 +118,12 @@ async function login(req, res) {
       });
     }
 
+    if (!requireJwtSecret(res)) return;
+
+    console.log('Login user role:', user.role);
+
     const token = jwt.sign(
-      { user_id: user.user_id, role: user.role },
+      { user_id: user.id, role: user.role },
       JWT_SECRET,
       { expiresIn: JWT_EXPIRES_IN }
     );
@@ -112,7 +132,7 @@ async function login(req, res) {
       success: true,
       data: {
         user: {
-          user_id: user.user_id,
+          user_id: user.id,
           email: user.email,
           full_name: user.full_name,
           role: user.role,
