@@ -1,4 +1,3 @@
-const { authenticate } = require('../middlewares/authMiddleware');
 const pool = require('../config/db');
 
 /**

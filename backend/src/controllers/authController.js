@@ -2,8 +2,12 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { findUserByEmail, createUser } = require('../repositories/authRepository');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'dev_secret_change_me_in_production';
+const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d';
+
+if (!JWT_SECRET) {
+  throw new Error('FATAL: JWT_SECRET environment variable is not set. Server cannot start securely.');
+}
 
 /**
  * Đăng ký tài khoản mới (mặc định role = member).
