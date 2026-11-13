@@ -13,6 +13,8 @@ import CommonComponentsPage from './pages/CommonComponentsPage';
 import LoginPage from './pages/auth/LoginPage';
 import RegisterPage from './pages/auth/RegisterPage';
 import ForbiddenPage from './pages/ForbiddenPage';
+import LandingPage from './pages/public/LandingPage';
+import PricingPage from './pages/public/PricingPage';
 
 function App() {
   return (
@@ -24,7 +26,8 @@ function App() {
 
       {/* Public store routes */}
       <Route element={<PublicLayout />}>
-        <Route index element={<StoreHomePage />} />
+        <Route index element={<LandingPage />} />
+        <Route path="pricing" element={<PricingPage />} />
         <Route path="ui-kit" element={<UiKit />} />
         <Route path="ui-kit/common" element={<CommonComponentsPage />} />
       </Route>
@@ -54,14 +57,14 @@ function App() {
         <Route path="products" element={<AdminProductsPage />} />
       </Route>
 
-      {/* Staff routes (requires 'staff' role) - ví dụ mở rộng sau này */}
+      {/* Staff routes (requires 'staff' role) - example for future expansion */}
       <Route
         path="/staff"
         element={
           <ProtectedRoute allowedRoles={['staff', 'admin']}>
             <div className="p-8 text-center text-white">
               <h1 className="text-2xl font-bold">Staff Dashboard</h1>
-              <p className="text-muted">Chào mừng nhân viên!</p>
+              <p className="text-muted">Welcome, staff!</p>
             </div>
           </ProtectedRoute>
         }
