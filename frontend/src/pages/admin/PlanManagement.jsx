@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
-import axiosClient from '@/api/axiosClient';
+import axiosClient from '../../api/axiosClient';
 import { Plus, Trash2, Edit3, Clock, Shield } from 'lucide-react';
-import { Button } from '@/components/ui/Button';
-import { Modal } from '@/components/ui/Modal';
-import { Input } from '@/components/ui/Input';
-import { FormField } from '@/components/ui/FormField';
+import Button from '../../components/ui/Button';
+import Modal from '../../components/ui/Modal';
+import Input from '../../components/ui/Input';
+import FormField from '../../components/ui/FormField';
 
 /**
  * PlanManagement - Admin page to manage membership plans.

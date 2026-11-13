@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import axiosClient from '@/api/axiosClient';
+import axiosClient from '../../api/axiosClient';
 import { Search, User, Clock, Shield } from 'lucide-react';
-import { Input } from '@/components/ui/Input';
+import Input from '../../components/ui/Input';
 
 /**
  * MemberList - Admin page to manage members.
